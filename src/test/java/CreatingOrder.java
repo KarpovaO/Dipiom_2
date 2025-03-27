@@ -10,6 +10,7 @@ import org.junit.Test;
 import static BaseTests.BaseUserTest.getAuthPj;
 import static RestApi.RequestsOrders.orderCreateAuthorized;
 import static RestApi.RequestsOrders.orderCreateUnauthorized;
+import static junit.framework.TestCase.assertFalse;
 import static org.apache.http.HttpStatus.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -33,9 +34,9 @@ public class CreatingOrder extends BaseOrderTest {
                 .assertThat()
                 .statusCode(SC_OK)
                 .extract().response();
-        assertTrue(r.jsonPath().get("name").toString().isEmpty());
-        assertEquals(true, r.jsonPath().get("success"));
-        assertTrue((Integer) r.path("order.number") > 0);
+        assertFalse(r.jsonPath().getString("name").isEmpty());
+        assertTrue(r.jsonPath().getBoolean("success"));
+        assertTrue(r.path("order.number") instanceof Integer && (Integer) r.path("order.number") > 0);
     }
 
     @Test

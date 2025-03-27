@@ -1,18 +1,20 @@
 package BaseTests;
 
 import Model.PojoUser;
+import com.github.javafaker.Faker;
 import io.restassured.response.Response;
 import org.junit.After;
-
-import java.time.Instant;
 
 import static RestApi.RequestsUsers.*;
 
 public class BaseUserTest extends BaseTest {
+    private static final Faker faker = new Faker();
+
     public static PojoUser createUser() {
-        String name = "TestUser" + Instant.now().toString();
-        String email = name + "@yandex.ru";
-        String password = "TestP$aSSword";
+        String name = faker.name().username();
+        String email = faker.internet().emailAddress();
+        String password = faker.internet().password(8, 16, true, true, true);
+
         return new PojoUser(email, password, name);
     }
 
@@ -55,5 +57,4 @@ public class BaseUserTest extends BaseTest {
             userDelete(pj);
         }
     }
-
 }
